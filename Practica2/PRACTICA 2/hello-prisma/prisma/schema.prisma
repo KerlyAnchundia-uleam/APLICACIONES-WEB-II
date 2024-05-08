@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+
+// Archivo schema.prisma
+// Definición del modelo Tutor
+model Tutor {
+  id              Int       @id @default(autoincrement())
+  nombre          String
+  identificacion  String    @unique
+  experticia      String
+  tutorias        Tutoria[]
+}
+
+// Definición del modelo Tutorado
+model Tutorado {
+  id              Int       @id @default(autoincrement())
+  nombre          String
+  identificacion  String    @unique
+  tutorias        Tutoria[]
+}
+
+// Definición del modelo Tutoria
+model Tutoria {
+  id              Int       @id @default(autoincrement())
+  tutor           Tutor     @relation(fields: [idTutor], references: [id])
+  tutorado        Tutorado  @relation(fields: [idTutorado], references: [id])
+  asignatura      String
+  numeroHoras     Int
+  fecha           DateTime
+  hora            String
+  idTutor         Int
+  idTutorado      Int
+  estado          Boolean    @default(false)
+}
